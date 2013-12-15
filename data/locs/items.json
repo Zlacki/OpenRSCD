@@ -1,0 +1,26 @@
+{
+	"Items":
+	[
+		{
+			"id":389,
+			"x":216,
+			"y":453,
+			"amount":3,
+			"respawn_time":1
+		},
+		{
+			"id":388,
+			"x":217,
+			"y":453,
+			"amount":3,
+			"respawn_time":1
+		},
+		{
+			"id":81,
+			"x":100,
+			"y":500,
+			"amount":2,
+			"respawn_time":1
+		}
+	]
+}
