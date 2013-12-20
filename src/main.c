@@ -56,7 +56,7 @@ void process_read(struct ev_loop *loop, struct ev_io *watcher, int revents) {
 		return;
 	}
 
-	for(int i = 0; i < MAX_CLIENTS; i++)
+	for(int i = 0; i < MAX_ENTITIES; i++)
 		if(clients[i] == watcher->fd)
 			on_read(i, ((short) ((buffer[0] & 0xFF) << 8) | (short) (buffer[1] & 0xFF)));
 
@@ -80,7 +80,7 @@ void process_accept(struct ev_loop *loop, struct ev_io *watcher, int revents) {
 	socket_set_no_block(socket);
 
 	struct ev_io *read_watcher = (struct ev_io*)safe_alloc(sizeof(struct ev_io));
-	for(int i = 0; i < MAX_CLIENTS; i++)
+	for(int i = 0; i < MAX_ENTITIES; i++)
 		if(clients[i] == -1) {
 			on_accept(loop, read_watcher, socket, i);
 			clients[i] = socket;
@@ -97,7 +97,7 @@ int main(void) {
 	signal(SIGPIPE, SIG_IGN);
 
 	printf("Initializing client array...");
-	memset((char*) &clients, -1, MAX_CLIENTS + 1);
+	memset((char*) &clients, -1, MAX_ENTITIES + 1);
 	puts("done.");
 
 	printf("Seeding random number generator...");

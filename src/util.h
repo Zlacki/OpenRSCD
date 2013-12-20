@@ -21,10 +21,10 @@
 
 #ifndef UTIL_H
 #define UTIL_H
-#define MAX_CLIENTS 2000
+#define MAX_ENTITIES 10000
 #include <ev.h>
 
-int clients[MAX_CLIENTS];
+int clients[MAX_ENTITIES];
 void client_destroy(struct ev_loop *, struct ev_io *);
 
 void *safe_alloc(size_t);

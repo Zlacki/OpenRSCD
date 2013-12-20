@@ -88,11 +88,6 @@ void player_connect(Player *player, Packet *packet) {
 	send_inventory(player);
 	send_equipment_bonuses(player);
 	player_set_location(player, 216 - (random() % 5), 453 - (random() % 5));
-	update_player_positions(player);
-	update_player_appearances(player);
-	update_ground_items(player);
-	update_objects(player);
-
 	return;
 }
 
@@ -102,10 +97,9 @@ void player_destroy(Player *player) {
 		free(player->inventory->items[i]);
 	free(player->inventory);
 	region_remove_player(player->region, player->index);
-	region_send_player_position_update(player->index);
 	player->region = NULL;
 	free(player->username);
-	players[player->index] = 0;
+	players[player->index] = NULL;
 	client_destroy(player->loop, player->watcher);
 	close(player->socket);
 	free(player);
@@ -199,7 +193,7 @@ void player_set_location(Player* player, int x, int y) {
 	player->x = x;
 	player->y = y;
 
-	Region *r = get_region(x / REGION_SIZE, y / REGION_SIZE);
+	Region *r = get_region(x, y);
 	if(r != player->region) {
 		if(player->region)
 			region_remove_player(player->region, player->index);

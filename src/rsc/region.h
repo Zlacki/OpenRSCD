@@ -36,6 +36,7 @@ typedef struct {
 
 Region *region_create(int, int);
 Region *get_region(int, int);
+GroundItem *get_ground_item(int, int, int, int);
 Region **region_get_surrounding_regions(int, int);
 void region_send_player_position_update(int);
 void region_send_player_appearance_update(int);

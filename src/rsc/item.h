@@ -35,6 +35,7 @@ typedef struct {
 	unsigned int amount;
 	unsigned int x;
 	unsigned int y;
+	unsigned int index;
 	unsigned char respawn_time;
 } GroundItem;
 

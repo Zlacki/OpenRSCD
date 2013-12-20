@@ -34,17 +34,24 @@ Item *item_create(unsigned short id, unsigned int amount) {
 
 GroundItem *ground_item_create(unsigned short id, unsigned int amount, unsigned int x, unsigned int y, unsigned char respawn_time) {
 	GroundItem *ground_item = safe_alloc(sizeof(GroundItem));
+	GroundItem *tile_item = get_ground_item(ground_item->index, ground_item->id, ground_item->x, ground_item->y);
+	Region *region = get_region(x, y);
 	ground_item->id = id;
 	ground_item->amount = amount;
 	ground_item->x = x;
 	ground_item->y = y;
 	ground_item->respawn_time = respawn_time;
-	region_add_item(get_region(x / REGION_SIZE, y / REGION_SIZE), ground_item);
+	for(int i = 0; i < MAX_ENTITIES; i++)
+		if(items[i] != NULL && tile_item != NULL) {
+			region_remove_item(region, tile_item);
+		}
+	region_add_item(region, ground_item);
 	return ground_item;
 }
 
 void ground_item_destroy(GroundItem *ground_item) {
-	region_remove_item(get_region(ground_item->x / REGION_SIZE, ground_item->y / REGION_SIZE), ground_item);
+	items[ground_item->index] = NULL;
+	region_remove_item(get_region(ground_item->x, ground_item->y), ground_item);
 	free(ground_item);
 	return;
 }

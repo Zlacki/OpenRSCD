@@ -44,12 +44,10 @@ void handle_walking(Player *player, Packet *packet) {
 	unsigned char step_count = (packet->length - packet->offset) / 2;
 	char *waypoints_x = safe_alloc(sizeof(char) * step_count);
 	char *waypoints_y = safe_alloc(sizeof(char) * step_count);
-	printf("startX:%d,startY:%d, waypoints: ", start_x, start_y);
 
 	for(int i = 0; i < step_count; i++) {
 		waypoints_x[i] = packet_read_byte(packet);
 		waypoints_y[i] = packet_read_byte(packet);
-		printf("[%d,%d], ", waypoints_x[i], waypoints_y[i]);
 	}
 
 	if(step_count > 0)
@@ -57,7 +55,6 @@ void handle_walking(Player *player, Packet *packet) {
 	else
 		player_set_location(player, start_x, start_y);
 
-	printf("\n");
 	return;
 }
 

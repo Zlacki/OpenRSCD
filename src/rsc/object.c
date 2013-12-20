@@ -31,7 +31,7 @@ Object *object_create(unsigned short id, unsigned int x, unsigned int y, unsigne
 	object->y = y;
 	object->direction = direction;
 	object->type = type;
-	region_add_object(get_region(x / REGION_SIZE, y / REGION_SIZE), object);
+	region_add_object(get_region(x, y), object);
 	return object;
 }
 

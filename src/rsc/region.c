@@ -46,10 +46,29 @@ int region_hash(int x, int y) {
 
 Region *get_region(int x, int y) {
 	Region *region;
+	if(hashmap_get(regions, region_hash(x / REGION_SIZE, y / REGION_SIZE), (void*)&region) == MAP_MISSING)
+		hashmap_put(regions, region_hash(x / REGION_SIZE, y / REGION_SIZE), (region = region_create(x / REGION_SIZE, y / REGION_SIZE)));
+
+	return region;
+}
+
+Region *get_region_with_coords(int x, int y) {
+	Region *region;
 	if(hashmap_get(regions, region_hash(x, y), (void*)&region) == MAP_MISSING)
 		hashmap_put(regions, region_hash(x, y), (region = region_create(x, y)));
 
 	return region;
+}
+
+GroundItem *get_ground_item(int index, int id, int x, int y) {
+	List *items = get_region(x, y)->items;
+	for(Node *node = items->first; node; node = node->next) {
+		GroundItem *item = (GroundItem*) node->val;
+		if(item->index == index && item->id == id && item->x == x && item->y == y)
+			return item;
+	}
+
+	return NULL;
 }
 
 /*
@@ -60,15 +79,15 @@ Region **region_get_surrounding_regions(int x, int y) {
 	int region_y = y / REGION_SIZE;
 
 	Region **surrounding_regions = safe_alloc(sizeof(Region*) * 9);
-	surrounding_regions[0] = get_region(region_x, region_y);
-	surrounding_regions[1] = get_region(region_x - 1, region_y - 1);
-	surrounding_regions[2] = get_region(region_x + 1, region_y + 1);
-	surrounding_regions[3] = get_region(region_x - 1, region_y);
-	surrounding_regions[4] = get_region(region_x, region_y - 1);
-	surrounding_regions[5] = get_region(region_x + 1, region_y);
-	surrounding_regions[6] = get_region(region_x, region_y + 1);
-	surrounding_regions[7] = get_region(region_x - 1, region_y + 1);
-	surrounding_regions[8] = get_region(region_x + 1, region_y - 1);
+	surrounding_regions[0] = get_region_with_coords(region_x, region_y);
+	surrounding_regions[1] = get_region_with_coords(region_x - 1, region_y - 1);
+	surrounding_regions[2] = get_region_with_coords(region_x + 1, region_y + 1);
+	surrounding_regions[3] = get_region_with_coords(region_x - 1, region_y);
+	surrounding_regions[4] = get_region_with_coords(region_x, region_y - 1);
+	surrounding_regions[5] = get_region_with_coords(region_x + 1, region_y);
+	surrounding_regions[6] = get_region_with_coords(region_x, region_y + 1);
+	surrounding_regions[7] = get_region_with_coords(region_x - 1, region_y + 1);
+	surrounding_regions[8] = get_region_with_coords(region_x + 1, region_y - 1);
 
 	return surrounding_regions;
 }
@@ -94,7 +113,7 @@ void region_add_item(Region *region, GroundItem *ground_item) {
 }
 
 void region_remove_item(Region *region, GroundItem *ground_item) {
-	list_delete(region->items, list_search(region->players, ground_item));
+	list_delete(region->items, list_search(region->items, ground_item));
 	region_send_item_position_update(ground_item);
 	return;
 }
@@ -127,7 +146,8 @@ void region_send_item_position_update(GroundItem *ground_item) {
 	List *players_to_update = ground_item_get_regional_players(ground_item);
 	for(Node *node = players_to_update->first; node; node = node->next) {
 		Player *player_to_update = (Player*) node->val;
-		if(player_within_range(player_to_update, ground_item->x, ground_item->y))
+
+		if(player_within_range(player_to_update, ground_item->x, ground_item->y) && get_ground_item(ground_item->index, ground_item->id, ground_item->x, ground_item->y) == NULL && list_search(player_get_regional_items(player_to_update), get_ground_item(ground_item->index, ground_item->id, ground_item->x, ground_item->y)) == NULL)
 			update_ground_items(player_to_update);
 	}
 

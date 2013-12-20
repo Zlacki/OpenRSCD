@@ -34,8 +34,9 @@
 #define REGION_SIZE 32
 #define REGION_LOWER_BOUND REGION_SIZE / 2 - 1
 
-Player *players[MAX_CLIENTS];
 hashmap_map *regions;
+Player *players[MAX_ENTITIES];
+GroundItem *items[MAX_ENTITIES];
 
 typedef struct {
 	unsigned short id;

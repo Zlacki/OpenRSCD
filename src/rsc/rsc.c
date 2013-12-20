@@ -200,6 +200,7 @@ void load(void) {
 
 	printf("Loading game engine...");
 
+	memset((char*) &clients, -1, MAX_ENTITIES + 1);
 	pthread_t game_engine;
 	if(pthread_create(&game_engine, NULL, engine_loop, NULL)) {
 		error("Could not start game engine thread.");
