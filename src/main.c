@@ -101,7 +101,7 @@ int main(void) {
 	puts("done.");
 
 	printf("Seeding random number generator...");
-	srand(time(NULL));
+	srandom(time(NULL));
 	puts("done");
 
 	printf("I/O initializing...");

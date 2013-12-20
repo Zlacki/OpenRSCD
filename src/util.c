@@ -26,7 +26,7 @@
 #include <string.h>
 #include <sys/ioctl.h>
 
-char *safe_alloc(size_t n) {
+void *safe_alloc(size_t n) {
 	char *m = (char*)malloc(n);
 	if(!m) {
 		/* In the future we should try
@@ -41,7 +41,7 @@ char *safe_alloc(size_t n) {
 	return m;
 }
 
-char *safe_calloc(size_t number, size_t size) {
+void *safe_calloc(size_t number, size_t size) {
 	char *m = (char*)calloc(number, size);
 	if(!m) {
 		/* In the future we should try
@@ -96,10 +96,10 @@ void str_trim(char *s) {
 }
 
 unsigned int rand256(void) {
-	static unsigned const limit = RAND_MAX - RAND_MAX % 256;
-	unsigned int result = rand();
+	static unsigned const limit = RAND_MAX;
+	unsigned int result = random();
 	while(result >= limit)
-		result = rand();
+		result = random();
 
 	return result % 256;
 }
