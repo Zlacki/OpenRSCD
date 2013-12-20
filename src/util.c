@@ -26,7 +26,8 @@
 #include <string.h>
 #include <sys/ioctl.h>
 
-void *safe_alloc(size_t n) {
+void *safe_alloc(size_t n)
+{
 	char *m = (char*)malloc(n);
 	if(!m) {
 		/* In the future we should try
@@ -41,7 +42,8 @@ void *safe_alloc(size_t n) {
 	return m;
 }
 
-void *safe_calloc(size_t number, size_t size) {
+void *safe_calloc(size_t number, size_t size)
+{
 	char *m = (char*)calloc(number, size);
 	if(!m) {
 		/* In the future we should try
@@ -56,7 +58,8 @@ void *safe_calloc(size_t number, size_t size) {
 	return m;
 }
 
-void error(char *msg) {
+void error(char *msg)
+{
 	char *tmp = safe_alloc(sizeof(char) * (strlen(msg) + 8));
 	snprintf(tmp, strlen(msg) + 8, "ERROR: %s", msg);
 	perror(tmp);
@@ -65,18 +68,21 @@ void error(char *msg) {
 	return;
 }
 
-void warning(char *msg) {
+void warning(char *msg)
+{
 	printf("WARNING: %s\n", msg);
 	return;
 }
 
-void str_prepend_char(char *s, char c) {
+void str_prepend_char(char *s, char c)
+{
 	memmove(s + 1, s, strlen(s) + 1);
 	s[0] = c;
 	return;
 }
 
-void str_trim(char *s) {
+void str_trim(char *s)
+{
 
 	char *s1;
 	for(s1 = s; *s1; s1++)
@@ -95,7 +101,8 @@ void str_trim(char *s) {
 	return;
 }
 
-unsigned int rand256(void) {
+unsigned int rand256(void)
+{
 	static unsigned const limit = RAND_MAX;
 	unsigned int result = random();
 	while(result >= limit)
@@ -104,7 +111,8 @@ unsigned int rand256(void) {
 	return result % 256;
 }
 
-long rand64bits(void) {
+long rand64bits(void)
+{
 	long result = 0UL;
 
 	for(int count = 8; count > 0; count--)
@@ -113,7 +121,8 @@ long rand64bits(void) {
 	return result;
 }
 
-int socket_set_no_block(int socket) {
+int socket_set_no_block(int socket)
+{
 	int flags;
 	if((flags = fcntl(socket, F_GETFL, 0)) == -1)
 		flags = 0;

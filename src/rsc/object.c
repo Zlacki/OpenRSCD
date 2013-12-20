@@ -24,7 +24,8 @@
 #include "object.h"
 #include "util.h"
 
-Object *object_create(unsigned short id, unsigned int x, unsigned int y, unsigned char direction, unsigned char type) {
+Object *object_create(unsigned short id, unsigned int x, unsigned int y, unsigned char direction, unsigned char type)
+{
 	Object *object = safe_alloc(sizeof(Object));
 	object->id = id;
 	object->x = x;
@@ -35,7 +36,8 @@ Object *object_create(unsigned short id, unsigned int x, unsigned int y, unsigne
 	return object;
 }
 
-List *object_get_regional_players(Object *object) {
+List *object_get_regional_players(Object *object)
+{
 	Region **surrounding_regions = region_get_surrounding_regions(object->x, object->y);
 
 	List *players_in_regional_area = list_create();

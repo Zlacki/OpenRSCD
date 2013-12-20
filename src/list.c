@@ -24,7 +24,8 @@
 #include "util.h"
 #include "list.h"
 
-Node *list_insert(List *list, void *val) {
+Node *list_insert(List *list, void *val)
+{
 	Node *node = safe_calloc(1, sizeof(Node));
 
 	node->val = val;
@@ -41,7 +42,8 @@ Node *list_insert(List *list, void *val) {
 	return node;
 }
 
-void list_delete(List *list, Node *node) {
+void list_delete(List *list, Node *node)
+{
 	Node *next = node->next;
 	Node *prev = node->prev;
 
@@ -69,7 +71,8 @@ void list_delete(List *list, Node *node) {
 	return;
 }
 
-Node *list_search(List *list, void *val) {
+Node *list_search(List *list, void *val)
+{
 	Node* node;
 
 	for(node = list->first; node; node = node->next)
@@ -79,7 +82,8 @@ Node *list_search(List *list, void *val) {
 	return NULL;
 }
 
-List *list_create(void) {
+List *list_create(void)
+{
 	List *list = safe_alloc(sizeof(List));
 	list->first = list->last = NULL;
 	list->size = 0;

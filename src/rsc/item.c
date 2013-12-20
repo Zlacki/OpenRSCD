@@ -24,7 +24,8 @@
 #include "region.h"
 #include "util.h"
 
-Item *item_create(unsigned short id, unsigned int amount) {
+Item *item_create(unsigned short id, unsigned int amount)
+{
 	Item *item = safe_alloc(sizeof(Item));
 	item->id = id;
 	item->amount = amount;
@@ -32,7 +33,8 @@ Item *item_create(unsigned short id, unsigned int amount) {
 	return item;
 }
 
-GroundItem *ground_item_create(unsigned short id, unsigned int amount, unsigned int x, unsigned int y, unsigned char respawn_time) {
+GroundItem *ground_item_create(unsigned short id, unsigned int amount, unsigned int x, unsigned int y, unsigned char respawn_time)
+{
 	GroundItem *ground_item = safe_alloc(sizeof(GroundItem));
 	GroundItem *tile_item = get_ground_item(ground_item->index, ground_item->id, ground_item->x, ground_item->y);
 	Region *region = get_region(x, y);
@@ -49,14 +51,16 @@ GroundItem *ground_item_create(unsigned short id, unsigned int amount, unsigned 
 	return ground_item;
 }
 
-void ground_item_destroy(GroundItem *ground_item) {
+void ground_item_destroy(GroundItem *ground_item)
+{
 	items[ground_item->index] = NULL;
 	region_remove_item(get_region(ground_item->x, ground_item->y), ground_item);
 	free(ground_item);
 	return;
 }
 
-List *ground_item_get_regional_players(GroundItem *ground_item) {
+List *ground_item_get_regional_players(GroundItem *ground_item)
+{
 	Region **surrounding_regions = region_get_surrounding_regions(ground_item->x, ground_item->y);
 
 	List *players_in_regional_area = list_create();

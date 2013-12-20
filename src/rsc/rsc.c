@@ -31,12 +31,14 @@
 #include "packethandler.h"
 #include "util.h"
 
-void on_accept(struct ev_loop *loop, struct ev_io *watcher, int socket, int index) {
+void on_accept(struct ev_loop *loop, struct ev_io *watcher, int socket, int index)
+{
 	players[index] = player_create(loop, watcher, socket, index);
 	return;
 }
 
-void on_read(int index, int packet_length) {
+void on_read(int index, int packet_length)
+{
 	Player *player = players[index];
 	if(player == NULL || index < 0)
 		return;
@@ -74,7 +76,8 @@ void on_read(int index, int packet_length) {
 	return;
 }
 
-void *engine_loop() {
+void *engine_loop()
+{
 	time_t walk_timer = 0;
 	for(;;) {
 		usleep(50000);
@@ -86,7 +89,8 @@ void *engine_loop() {
 	return NULL;
 }
 
-void load(void) {
+void load(void)
+{
 	printf("RuneScape Classic\n");
 	printf("Loading definitions...\n\n");
 

@@ -26,7 +26,8 @@
 
 #define INITIAL_SIZE 1024
 
-hashmap_map* hashmap_new() {
+hashmap_map* hashmap_new()
+{
 	hashmap_map* m = (hashmap_map*) safe_alloc(sizeof(hashmap_map));
 	if(!m) {
 		if (m)
@@ -47,7 +48,8 @@ hashmap_map* hashmap_new() {
 	return m;
 }
 
-unsigned int hashmap_hash_int(hashmap_map* m, unsigned int key){
+unsigned int hashmap_hash_int(hashmap_map* m, unsigned int key)
+{
 	key += (key << 12);
 	key ^= (key >> 22);
 	key += (key << 4);
@@ -62,7 +64,8 @@ unsigned int hashmap_hash_int(hashmap_map* m, unsigned int key){
 	return key % m->table_size;
 }
 
-int hashmap_hash(hashmap_map* m, int key){
+int hashmap_hash(hashmap_map* m, int key)
+{
 	int curr;
 	int i;
 
@@ -70,7 +73,7 @@ int hashmap_hash(hashmap_map* m, int key){
 
 	curr = hashmap_hash_int(m, key);
 
-	for(i = 0; i< m->table_size; i++){
+	for(i = 0; i< m->table_size; i++) {
 		if(m->data[curr].in_use == 0)
 			return curr;
 
@@ -83,7 +86,8 @@ int hashmap_hash(hashmap_map* m, int key){
 	return MAP_FULL;
 }
 
-int hashmap_rehash(hashmap_map* m){
+int hashmap_rehash(hashmap_map* m)
+{
 	int i;
 	int old_size;
 	hashmap_element* curr;
@@ -99,7 +103,7 @@ int hashmap_rehash(hashmap_map* m){
 	m->table_size = 2 * m->table_size;
 	m->size = 0;
 
-	for(i = 0; i < old_size; i++){
+	for(i = 0; i < old_size; i++) {
 		int status = hashmap_put(m, curr[i].key, curr[i].data);
 		if (status != MAP_OK)
 			return status;
@@ -110,11 +114,12 @@ int hashmap_rehash(hashmap_map* m){
 	return MAP_OK;
 }
 
-int hashmap_put(hashmap_map* m, int key, void* value){
+int hashmap_put(hashmap_map* m, int key, void* value)
+{
 	int index;
 
 	index = hashmap_hash(m, key);
-	while(index == MAP_FULL){
+	while(index == MAP_FULL) {
 		if (hashmap_rehash(m) == MAP_OMEM) {
 			return MAP_OMEM;
 		}
@@ -129,15 +134,16 @@ int hashmap_put(hashmap_map* m, int key, void* value){
 	return MAP_OK;
 }
 
-int hashmap_get(hashmap_map* m, int key, void** arg) {
+int hashmap_get(hashmap_map* m, int key, void** arg)
+{
 	int curr;
 	int i;
 
 	curr = hashmap_hash_int(m, key);
 
-	for(i = 0; i< m->table_size; i++){
+	for(i = 0; i< m->table_size; i++) {
 
-		if(m->data[curr].key == key && m->data[curr].in_use == 1){
+		if(m->data[curr].key == key && m->data[curr].in_use == 1) {
 			*arg = (void*) (m->data[curr].data);
 			return MAP_OK;
 		}
@@ -150,14 +156,15 @@ int hashmap_get(hashmap_map* m, int key, void** arg) {
 	return MAP_MISSING;
 }
 
-int hashmap_get_one(hashmap_map* m, void** arg, int remove){
+int hashmap_get_one(hashmap_map* m, void** arg, int remove)
+{
 	int i;
 
 	if (hashmap_length(m) <= 0)
 		return MAP_MISSING;
 
 	for(i = 0; i< m->table_size; i++)
-		if(m->data[i].in_use != 0){
+		if(m->data[i].in_use != 0) {
 			*arg = (void*) (m->data[i].data);
 			if (remove) {
 				m->data[i].in_use = 0;
@@ -169,7 +176,8 @@ int hashmap_get_one(hashmap_map* m, void** arg, int remove){
 	return MAP_OK;
 }
 
-int hashmap_iterate(hashmap_map* m, PFany f, void* item) {
+int hashmap_iterate(hashmap_map* m, PFany f, void* item)
+{
 	int i;
 
 	if (hashmap_length(m) <= 0)
@@ -187,14 +195,15 @@ int hashmap_iterate(hashmap_map* m, PFany f, void* item) {
         return MAP_OK;
 }
 
-int hashmap_remove(hashmap_map* m, int key){
+int hashmap_remove(hashmap_map* m, int key)
+{
 	int i;
 	int curr;
 
 	curr = hashmap_hash_int(m, key);
 
-	for(i = 0; i< m->table_size; i++){
-		if(m->data[curr].key == key && m->data[curr].in_use == 1){
+	for(i = 0; i< m->table_size; i++) {
+		if(m->data[curr].key == key && m->data[curr].in_use == 1) {
 			m->data[curr].in_use = 0;
 			m->data[curr].data = NULL;
 			m->data[curr].key = 0;
@@ -208,12 +217,14 @@ int hashmap_remove(hashmap_map* m, int key){
 	return MAP_MISSING;
 }
 
-void hashmap_free(hashmap_map* m){
+void hashmap_free(hashmap_map* m)
+{
 	free(m->data);
 	free(m);
 }
 
-int hashmap_length(hashmap_map* m){
+int hashmap_length(hashmap_map* m)
+{
 	if(m != NULL)
 		return m->size;
 	return 0;

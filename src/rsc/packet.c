@@ -35,7 +35,8 @@ const int BITMASKS[] = {
 	-1
 };
 
-Packet *packet_create(unsigned char id) {
+Packet *packet_create(unsigned char id)
+{
 	Packet *p = safe_alloc(sizeof(Packet));
 	p->id = id;
 	p->offset = 0;
@@ -44,25 +45,30 @@ Packet *packet_create(unsigned char id) {
 	return p;
 }
 
-void packet_destroy(Packet *packet) {
+void packet_destroy(Packet *packet)
+{
 	free(packet->buffer);
 	free(packet);
 	return;
 }
 
-unsigned char packet_read_byte(Packet *p) {
+unsigned char packet_read_byte(Packet *p)
+{
 	return p->buffer[p->offset++];
 }
 
-unsigned short packet_read_short(Packet *p) {
+unsigned short packet_read_short(Packet *p)
+{
 	return (short) ((short) ((packet_read_byte(p) & 0xFF) << 8) | (short) (packet_read_byte(p) & 0xFF));
 }
 
-unsigned int packet_read_int(Packet *p) {
+unsigned int packet_read_int(Packet *p)
+{
 	return ((packet_read_byte(p) & 0xFF) << 24) | ((packet_read_byte(p) & 0xFF) << 16) | ((packet_read_byte(p) & 0xFF) << 8) | (packet_read_byte(p) & 0xFF);
 }
 
-char *packet_read_string(Packet *p) {
+char *packet_read_string(Packet *p)
+{
 	int len = packet_read_byte(p) & 0xFF;
 	char *buffer = safe_alloc(len + 1);
 	for(int i = 0; i < len; i++)
@@ -71,7 +77,8 @@ char *packet_read_string(Packet *p) {
 	return buffer;
 }
 
-void packet_add_bits(Packet *p, unsigned int val, unsigned int num) {
+void packet_add_bits(Packet *p, unsigned int val, unsigned int num)
+{
 	int byte_position = (p->bit_position >> 3);
 	int bit_offset = 8 - (p->bit_position & 7);
 	p->bit_position += num;
@@ -93,18 +100,21 @@ void packet_add_bits(Packet *p, unsigned int val, unsigned int num) {
 	return;
 }
 
-void packet_add_byte(Packet *p, unsigned char c) {
+void packet_add_byte(Packet *p, unsigned char c)
+{
 	p->buffer[p->offset++] = (c & 0xFF);
 	return;
 }
 
-void packet_add_short(Packet *p, unsigned short val) {
+void packet_add_short(Packet *p, unsigned short val)
+{
 	packet_add_byte(p, (char) (val >> 8));
 	packet_add_byte(p, (char) val);
 	return;
 }
 
-void packet_add_integer(Packet *p, unsigned int val) {
+void packet_add_integer(Packet *p, unsigned int val)
+{
 	packet_add_byte(p, (char) (val >> 24));
 	packet_add_byte(p, (char) (val >> 16));
 	packet_add_byte(p, (char) (val >> 8));
@@ -112,7 +122,8 @@ void packet_add_integer(Packet *p, unsigned int val) {
 	return;
 }
 
-void packet_add_long(Packet *p, unsigned long l) {
+void packet_add_long(Packet *p, unsigned long l)
+{
 	for(int i = 56; i >= 0; i -= 8)
 		packet_add_byte(p, (char) (l >> i));
 	return;

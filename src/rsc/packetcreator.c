@@ -26,7 +26,8 @@
 #include "region.h"
 #include "util.h"
 
-void update_player_positions(Player *player) {
+void update_player_positions(Player *player)
+{
 	Packet *packet = packet_create(145);
 	packet_add_bits(packet, player->x, 11);
 	packet_add_bits(packet, player->y, 13);
@@ -50,7 +51,8 @@ void update_player_positions(Player *player) {
 	return;
 }
 
-void update_player_appearances(Player *player) {
+void update_player_appearances(Player *player)
+{
 	Packet *packet = packet_create(53);
 	packet_add_short(packet, player_get_regional_players(player)->size);
 
@@ -75,7 +77,8 @@ void update_player_appearances(Player *player) {
 	return;
 }
 
-void update_ground_items(Player *player) {
+void update_ground_items(Player *player)
+{
 	Packet *packet = packet_create(109);
 	List *ground_items = player_get_regional_items(player);
 
@@ -97,7 +100,8 @@ void update_ground_items(Player *player) {
 	return;
 }
 
-void update_objects(Player *player) {
+void update_objects(Player *player)
+{
 	Packet *packet = packet_create(27);
 	List *objects = player_get_regional_objects(player);
 
@@ -119,14 +123,16 @@ void update_objects(Player *player) {
 	return;
 }
 
-void send_login_response(Player *player, char res) {
+void send_login_response(Player *player, char res)
+{
 	Packet *packet = packet_create(-1);
 	packet_add_byte(packet, res);
 	player_packet_send(player, packet);
 	return;
 }
 
-void send_constants(Player *player) {
+void send_constants(Player *player)
+{
 	Packet *packet = packet_create(131);
 	packet_add_short(packet, player->index);
 	packet_add_short(packet, 2304); /* TODO: Name these magic numbers */
@@ -137,7 +143,8 @@ void send_constants(Player *player) {
 	return;
 }
 
-void send_client_options(Player *player) {
+void send_client_options(Player *player)
+{
 	Packet *packet = packet_create(158);
 
 	for(int i = 0; i < 3; i++)
@@ -151,7 +158,8 @@ void send_client_options(Player *player) {
 	return;
 }
 
-void send_welcome_box(Player *player) {
+void send_welcome_box(Player *player)
+{
 	Packet *packet = packet_create(248);
 	packet_add_byte(packet, 127);
 	packet_add_byte(packet, 0);
@@ -164,7 +172,8 @@ void send_welcome_box(Player *player) {
 	return;
 }
 
-void send_server_message(Player *player, char *msg) {
+void send_server_message(Player *player, char *msg)
+{
 	Packet *packet = packet_create(48);
 
 	char c;
@@ -175,7 +184,8 @@ void send_server_message(Player *player, char *msg) {
 	return;
 }
 
-void send_stats(Player *player) {
+void send_stats(Player *player)
+{
 	Packet *packet = packet_create(180);
 
 	for(int i = 0; i < 18; i++)
@@ -199,7 +209,8 @@ void send_stats(Player *player) {
 	return;
 }
 
-void send_inventory(Player *player) {
+void send_inventory(Player *player)
+{
 	Packet *packet = packet_create(114);
 	packet_add_byte(packet, player->inventory->index);
 
@@ -217,7 +228,8 @@ void send_inventory(Player *player) {
 	return;
 }
 
-void send_update_item(Player *player, unsigned char slot) {
+void send_update_item(Player *player, unsigned char slot)
+{
 	Packet *packet = packet_create(228);
 	Item *item = player->inventory->items[slot];
 
@@ -230,7 +242,8 @@ void send_update_item(Player *player, unsigned char slot) {
 	return;
 }
 
-void send_equipment_bonuses(Player *player) {
+void send_equipment_bonuses(Player *player)
+{
 	Packet *packet = packet_create(177);
 
 	for(int i = 0; i < 5; i++)
@@ -240,7 +253,8 @@ void send_equipment_bonuses(Player *player) {
 	return;
 }
 
-void send_session_key(Player *player) {
+void send_session_key(Player *player)
+{
 	Packet *packet = packet_create(-1);
 	packet_add_long(packet, rand64bits());
 	player_packet_send(player, packet);

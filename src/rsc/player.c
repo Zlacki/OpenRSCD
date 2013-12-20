@@ -29,7 +29,8 @@
 #include "object.h"
 #include "util.h"
 
-Player *player_create(struct ev_loop *loop, struct ev_io *watcher, unsigned int socket, unsigned int index) {
+Player *player_create(struct ev_loop *loop, struct ev_io *watcher, unsigned int socket, unsigned int index)
+{
 	Player *player = safe_alloc(sizeof(Player));
 	player->loop = loop;
 	player->watcher = watcher;
@@ -41,7 +42,8 @@ Player *player_create(struct ev_loop *loop, struct ev_io *watcher, unsigned int 
 	return player;
 }
 
-void player_connect(Player *player, Packet *packet) {
+void player_connect(Player *player, Packet *packet)
+{
 	packet_read_byte(packet); /* garbage */
 	unsigned int version = packet_read_short(packet);
 	if(version != 202) {
@@ -91,7 +93,8 @@ void player_connect(Player *player, Packet *packet) {
 	return;
 }
 
-void player_destroy(Player *player) {
+void player_destroy(Player *player)
+{
 	printf("Unregistering player: ‘%s’\n", player->username);
 	for(int i = 0; i < player->inventory->index; i++)
 		free(player->inventory->items[i]);
@@ -107,7 +110,8 @@ void player_destroy(Player *player) {
 	return;
 }
 
-void player_disconnect(Player *player) {
+void player_disconnect(Player *player)
+{
 	if(player != NULL) {
 		player_packet_send(player, packet_create(222));
 		player_destroy(player);
@@ -115,7 +119,8 @@ void player_disconnect(Player *player) {
 	return;
 }
 
-void player_packet_send(Player *player, Packet *packet) {
+void player_packet_send(Player *player, Packet *packet)
+{
 	if(packet->id == 255) {
 		if(write(player->socket, packet->buffer, packet->offset + 1) < 0) {
 			warning("Player sent less bytes than encoded for; disconnecting.");
@@ -148,13 +153,15 @@ void player_packet_send(Player *player, Packet *packet) {
 	return;
 }
 
-char player_within_range(Player *player, int x, int y) {
+char player_within_range(Player *player, int x, int y)
+{
 	int xd = player->x - x;
 	int yd = player->y - y;
 	return xd <= 16 && xd >= -15 && yd <= 16 && yd >= -15;
 }
 
-void player_equip_item(Player *player, Item *item) {
+void player_equip_item(Player *player, Item *item)
+{
 	ItemDefinition *def = item_definitions[item->id];
 	if(def->wearable) {
 		player->worn_items[def->wearable_slot] = def->sprite;
@@ -172,7 +179,8 @@ void player_equip_item(Player *player, Item *item) {
 	return;
 }
 
-void player_remove_item(Player *player, Item *item) {
+void player_remove_item(Player *player, Item *item)
+{
 	ItemDefinition *def = item_definitions[item->id];
 	player->worn_items[def->wearable_slot] = 0;
 	player->bonuses[0] -= def->armor_bonus;
@@ -188,7 +196,8 @@ void player_remove_item(Player *player, Item *item) {
 	return;
 }
 
-void player_set_location(Player* player, int x, int y) {
+void player_set_location(Player* player, int x, int y)
+{
 
 	player->x = x;
 	player->y = y;
@@ -208,7 +217,8 @@ void player_set_location(Player* player, int x, int y) {
 	return;
 }
 
-List *player_get_regional_items(Player *player) {
+List *player_get_regional_items(Player *player)
+{
 	Region **surrounding_regions = region_get_surrounding_regions(player->x, player->y);
 
 	List *items_in_regional_area = list_create();
@@ -226,7 +236,8 @@ List *player_get_regional_items(Player *player) {
 	return items_in_regional_area;
 }
 
-List *player_get_regional_objects(Player *player) {
+List *player_get_regional_objects(Player *player)
+{
 	Region **surrounding_regions = region_get_surrounding_regions(player->x, player->y);
 
 	List *objects_in_regional_area = list_create();
@@ -244,7 +255,8 @@ List *player_get_regional_objects(Player *player) {
 	return objects_in_regional_area;
 }
 
-List *player_get_regional_players(Player *player) {
+List *player_get_regional_players(Player *player)
+{
 	Region **surrounding_regions = region_get_surrounding_regions(player->x, player->y);
 
 	List *players_in_regional_area = list_create();

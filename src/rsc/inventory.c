@@ -22,18 +22,21 @@
 #include "inventory.h"
 #include "util.h"
 
-Inventory *inventory_initialize(void) {
+Inventory *inventory_initialize(void)
+{
 	Inventory *inventory = safe_alloc(sizeof(Inventory));
 	inventory->index = 0;
 	return inventory;
 }
 
-void inventory_add_item(Inventory *inventory, Item *item) {
+void inventory_add_item(Inventory *inventory, Item *item)
+{
 	inventory->items[inventory->index++] = item;
 	return;
 }
 
-char inventory_get_item(Inventory *inventory, unsigned int id) {
+char inventory_get_item(Inventory *inventory, unsigned int id)
+{
 	unsigned char i;
 	for(i = 0; i < inventory->index; i++)
 		if(inventory->items[i]->id == id)

@@ -27,7 +27,8 @@
 #include "../hashmap.h"
 #include "util.h"
 
-Region *region_create(int x, int y) {
+Region *region_create(int x, int y)
+{
 	Region *region = safe_alloc(sizeof(Region));
 	region->x = x;
 	region->y = y;
@@ -37,14 +38,16 @@ Region *region_create(int x, int y) {
 	return region;
 }
 
-int region_hash(int x, int y) {
+int region_hash(int x, int y)
+{
 	int i = 1;
 	i = 31 * i + x;
 	i = 31 * i + y;
 	return i;
 }
 
-Region *get_region(int x, int y) {
+Region *get_region(int x, int y)
+{
 	Region *region;
 	if(hashmap_get(regions, region_hash(x / REGION_SIZE, y / REGION_SIZE), (void*)&region) == MAP_MISSING)
 		hashmap_put(regions, region_hash(x / REGION_SIZE, y / REGION_SIZE), (region = region_create(x / REGION_SIZE, y / REGION_SIZE)));
@@ -52,7 +55,8 @@ Region *get_region(int x, int y) {
 	return region;
 }
 
-Region *get_region_with_coords(int x, int y) {
+Region *get_region_with_coords(int x, int y)
+{
 	Region *region;
 	if(hashmap_get(regions, region_hash(x, y), (void*)&region) == MAP_MISSING)
 		hashmap_put(regions, region_hash(x, y), (region = region_create(x, y)));
@@ -60,7 +64,8 @@ Region *get_region_with_coords(int x, int y) {
 	return region;
 }
 
-GroundItem *get_ground_item(int index, int id, int x, int y) {
+GroundItem *get_ground_item(int index, int id, int x, int y)
+{
 	List *items = get_region(x, y)->items;
 	for(Node *node = items->first; node; node = node->next) {
 		GroundItem *item = (GroundItem*) node->val;
@@ -74,7 +79,8 @@ GroundItem *get_ground_item(int index, int id, int x, int y) {
 /*
  * TODO: This is an inefficient lazy dirty hack that needs fixed.
  */
-Region **region_get_surrounding_regions(int x, int y) {
+Region **region_get_surrounding_regions(int x, int y)
+{
 	int region_x = x / REGION_SIZE;
 	int region_y = y / REGION_SIZE;
 
@@ -92,45 +98,52 @@ Region **region_get_surrounding_regions(int x, int y) {
 	return surrounding_regions;
 }
 
-void region_remove_player(Region *region, int index) {
+void region_remove_player(Region *region, int index)
+{
 	list_delete(region->players, list_search(region->players, players[index]));
 	region_send_player_position_update(index);
 	region_send_player_appearance_update(index);
 	return;
 }
 
-void region_add_player(Region *region, int index) {
+void region_add_player(Region *region, int index)
+{
 	list_insert(region->players, players[index]);
 	region_send_player_position_update(index);
 	region_send_player_appearance_update(index);
 	return;
 }
 
-void region_add_item(Region *region, GroundItem *ground_item) {
+void region_add_item(Region *region, GroundItem *ground_item)
+{
 	list_insert(region->items, ground_item);
 	region_send_item_position_update(ground_item);
 	return;
 }
 
-void region_remove_item(Region *region, GroundItem *ground_item) {
+void region_remove_item(Region *region, GroundItem *ground_item)
+{
 	list_delete(region->items, list_search(region->items, ground_item));
 	region_send_item_position_update(ground_item);
 	return;
 }
 
-void region_add_object(Region *region, Object *object) {
+void region_add_object(Region *region, Object *object)
+{
 	list_insert(region->objects, object);
 	region_send_object_position_update(object);
 	return;
 }
 
-void region_remove_object(Region *region, Object *object) {
+void region_remove_object(Region *region, Object *object)
+{
 	list_delete(region->objects, list_search(region->players, object));
 	region_send_object_position_update(object);
 	return;
 }
 
-void region_send_object_position_update(Object *object) {
+void region_send_object_position_update(Object *object)
+{
 	List *players_to_update = object_get_regional_players(object);
 	for(Node *node = players_to_update->first; node; node = node->next) {
 		Player *player_to_update = (Player*) node->val;
@@ -142,7 +155,8 @@ void region_send_object_position_update(Object *object) {
 	return;
 }
 
-void region_send_item_position_update(GroundItem *ground_item) {
+void region_send_item_position_update(GroundItem *ground_item)
+{
 	List *players_to_update = ground_item_get_regional_players(ground_item);
 	for(Node *node = players_to_update->first; node; node = node->next) {
 		Player *player_to_update = (Player*) node->val;
@@ -155,7 +169,8 @@ void region_send_item_position_update(GroundItem *ground_item) {
 	return;
 }
 
-void region_send_player_position_update(int index) {
+void region_send_player_position_update(int index)
+{
 	List *players_to_update = player_get_regional_players(players[index]);
 	for(Node *node = players_to_update->first; node; node = node->next) {
 		Player *player_to_update = (Player*) node->val;
@@ -167,7 +182,8 @@ void region_send_player_position_update(int index) {
 	return;
 }
 
-void region_send_player_appearance_update(int index) {
+void region_send_player_appearance_update(int index)
+{
 	List *players_to_update = player_get_regional_players(players[index]);
 	for(Node *node = players_to_update->first; node; node = node->next) {
 		Player *player_to_update = (Player*) node->val;

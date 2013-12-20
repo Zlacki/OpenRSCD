@@ -26,11 +26,13 @@
 #include "object.h"
 #include "util.h"
 
-char get_height(int y) {
+char get_height(int y)
+{
 	return ((char) (y / MAX_WIDTH));
 }
 
-long username_to_hash(char *username) {
+long username_to_hash(char *username)
+{
 	char *s1 = safe_alloc(13);
 	int i;
 	for(i = 0; i < strlen(username); i++) {
@@ -64,7 +66,8 @@ long username_to_hash(char *username) {
 	return l;
 }
 
-char *hash_to_username(long hash) {
+char *hash_to_username(long hash)
+{
 	if(hash < 0L)
 		return "invalid_name";
 
@@ -87,7 +90,8 @@ char *hash_to_username(long hash) {
 	return s;
 }
 
-void parse_object_definitions(json_object *jobj) {
+void parse_object_definitions(json_object *jobj)
+{
 	jobj = json_object_object_get(jobj, "Objects");
 	int len = json_object_array_length(jobj);
 	object_definitions = safe_alloc(sizeof(ObjectDefinition) * len);
@@ -109,7 +113,8 @@ void parse_object_definitions(json_object *jobj) {
 	return;
 }
 
-void parse_object_locations(json_object *jobj) {
+void parse_object_locations(json_object *jobj)
+{
 	jobj = json_object_object_get(jobj, "GroundObjects");
 	int len = json_object_array_length(jobj);
 	for(int i = 0; i < len; i++) {
@@ -125,7 +130,8 @@ void parse_object_locations(json_object *jobj) {
 	return;
 }
 
-void parse_door_definitions(json_object *jobj) {
+void parse_door_definitions(json_object *jobj)
+{
 	jobj = json_object_object_get(jobj, "Doors");
 	int len = json_object_array_length(jobj);
 	door_definitions = safe_alloc(sizeof(DoorDefinition) * len);
@@ -144,7 +150,8 @@ void parse_door_definitions(json_object *jobj) {
 	return;
 }
 
-void parse_npc_definitions(json_object *jobj) {
+void parse_npc_definitions(json_object *jobj)
+{
 	jobj = json_object_object_get(jobj, "NPCs");
 	int len = json_object_array_length(jobj);
 	npc_definitions = safe_alloc(sizeof(NPCDefinition) * len);
@@ -167,7 +174,8 @@ void parse_npc_definitions(json_object *jobj) {
 	return;
 }
 
-void parse_item_definitions(json_object *jobj) {
+void parse_item_definitions(json_object *jobj)
+{
 	jobj = json_object_object_get(jobj, "Items");
 	int len = json_object_array_length(jobj);
 	item_definitions = safe_alloc(sizeof(ItemDefinition) * len);
@@ -199,7 +207,8 @@ void parse_item_definitions(json_object *jobj) {
 	return;
 }
 
-void parse_item_locations(json_object *jobj) {
+void parse_item_locations(json_object *jobj)
+{
 	jobj = json_object_object_get(jobj, "Items");
 	int len = json_object_array_length(jobj);
 	for(int i = 0; i < len; i++) {
@@ -224,7 +233,8 @@ void parse_item_locations(json_object *jobj) {
 	return;
 }
 
-void parse_prayer_definitions(json_object *jobj) {
+void parse_prayer_definitions(json_object *jobj)
+{
 	jobj = json_object_object_get(jobj, "Prayers");
 	int len = json_object_array_length(jobj);
 	prayer_definitions = safe_alloc(sizeof(PrayerDefinition) * len);
@@ -242,7 +252,8 @@ void parse_prayer_definitions(json_object *jobj) {
 	return;
 }
 
-void parse_spell_definitions(json_object *jobj) {
+void parse_spell_definitions(json_object *jobj)
+{
 	jobj = json_object_object_get(jobj, "Spells");
 	int len = json_object_array_length(jobj);
 	spell_definitions = safe_alloc(sizeof(SpellDefinition) * len);

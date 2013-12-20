@@ -33,13 +33,15 @@
 #include "module.h"
 #include "util.h"
 
-void client_destroy(struct ev_loop *loop, struct ev_io *watcher) {
+void client_destroy(struct ev_loop *loop, struct ev_io *watcher)
+{
 	clients[watcher->fd] = -1;
 	ev_io_stop(loop, watcher);
 	free(watcher);
 }
 
-void process_read(struct ev_loop *loop, struct ev_io *watcher, int revents) {
+void process_read(struct ev_loop *loop, struct ev_io *watcher, int revents)
+{
 	if(EV_ERROR & revents) {
 		warning("Recieved abnormal event; dropping.");
 		clients[watcher->fd] = -1;
@@ -63,7 +65,8 @@ void process_read(struct ev_loop *loop, struct ev_io *watcher, int revents) {
 	return;
 }
 
-void process_accept(struct ev_loop *loop, struct ev_io *watcher, int revents) {
+void process_accept(struct ev_loop *loop, struct ev_io *watcher, int revents)
+{
 	if(EV_ERROR & revents) {
 		warning("Recieved abnormal event; dropping.");
 		return;
@@ -92,7 +95,8 @@ void process_accept(struct ev_loop *loop, struct ev_io *watcher, int revents) {
 	return;
 }
 
-int main(void) {
+int main(void)
+{
 	puts("Core initializing...");
 	signal(SIGPIPE, SIG_IGN);
 

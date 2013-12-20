@@ -26,7 +26,8 @@
 #include "packethandler.h"
 #include "util.h"
 
-void handle_player_indicies(Player *player, Packet *packet) {
+void handle_player_indicies(Player *player, Packet *packet)
+{
 	int length = packet_read_short(packet);
 	printf("Length:%d,Indicies:", length);
 
@@ -38,7 +39,8 @@ void handle_player_indicies(Player *player, Packet *packet) {
 	return;
 }
 
-void handle_walking(Player *player, Packet *packet) {
+void handle_walking(Player *player, Packet *packet)
+{
 	unsigned short start_x = packet_read_short(packet);
 	unsigned short start_y = packet_read_short(packet);
 	unsigned char step_count = (packet->length - packet->offset) / 2;
@@ -58,7 +60,8 @@ void handle_walking(Player *player, Packet *packet) {
 	return;
 }
 
-void handle_remove_item(Player *player, Packet *packet) {
+void handle_remove_item(Player *player, Packet *packet)
+{
 	short slot = packet_read_short(packet);
 	if(slot > player->inventory->index || slot < 0) {
 		printf("Suspicious behavior from ‘%s’ trying to remove something they don't have.\n", player->username);
@@ -75,7 +78,8 @@ void handle_remove_item(Player *player, Packet *packet) {
 	return;
 }
 
-void handle_equip_item(Player *player, Packet *packet) {
+void handle_equip_item(Player *player, Packet *packet)
+{
 	short slot = packet_read_short(packet);
 	if(slot > player->inventory->index || slot < 0) {
 		printf("Suspicious behavior from ‘%s’ trying to equip something they don't have.\n", player->username);
@@ -97,7 +101,8 @@ void handle_equip_item(Player *player, Packet *packet) {
 	return;
 }
 
-void handle_packet(Player *player, Packet *packet) {
+void handle_packet(Player *player, Packet *packet)
+{
 	switch(packet->id) {
 	case 0:
 		player_connect(player, packet);

@@ -19,7 +19,8 @@
  *
  */
 
-HashSet* hashset_create() {
+HashSet* hashset_create()
+{
 	HashSet *set = safe_calloc(1, sizeof(HashSet));
 
 	set->nbits = 3;
@@ -31,14 +32,16 @@ HashSet* hashset_create() {
 	return set;
 }
 
-void hashset_destroy(HashSet *set) {
+void hashset_destroy(HashSet *set)
+{
 	if(set)
 		free(set->items);
 
 	free(set);
 }
 
-void hashset_insert(HashSet *set, void *item) {
+void hashset_insert(HashSet *set, void *item)
+{
 	size_t value = (size_t)item;
 	size_t ii;
 
