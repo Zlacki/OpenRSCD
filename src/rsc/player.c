@@ -87,7 +87,7 @@ void player_connect(Player *player, Packet *packet) {
 	send_stats(player);
 	send_inventory(player);
 	send_equipment_bonuses(player);
-	player_set_location(player, 216, 453 - (rand() % 5));
+	player_set_location(player, 216 - (random % 5), 453 - (random % 5));
 	update_player_positions(player);
 	update_player_appearances(player);
 	update_ground_items(player);
