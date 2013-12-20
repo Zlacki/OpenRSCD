@@ -83,7 +83,7 @@ void player_connect(Player *player, Packet *packet) {
 	send_login_response(player, 0);
 	send_constants(player);
 	send_client_options(player);
-	send_server_message(player, "Welcome to CirnoPK!");
+	send_server_message(player, "Welcome to OpenRSCD!");
 	send_stats(player);
 	send_inventory(player);
 	send_equipment_bonuses(player);
