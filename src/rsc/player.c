@@ -203,8 +203,10 @@ void player_set_location(Player* player, int x, int y)
 			region_remove_player(player->region, player->index);
 		player->region = r;
 		region_add_player(player->region, player->index);
-	} else
+	} else {
 		region_send_player_position_update(player->index);
+		region_send_player_appearance_update(player->index);
+	}
 
 	update_ground_items(player);
 	update_objects(player);
