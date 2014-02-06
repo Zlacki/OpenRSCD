@@ -122,7 +122,7 @@ void player_packet_send(Player *player, Packet *packet)
 		if(write(player->socket, packet->buffer, packet->offset + 1) < 0) {
 			warning("Player sent less bytes than encoded for; disconnecting.");
 			packet_destroy(packet);
-			player_destroy(player);
+			player_disconnect(player);
 			return;
 		}
 	} else {
@@ -139,7 +139,7 @@ void player_packet_send(Player *player, Packet *packet)
 			warning("Player sent less bytes than encoded for; disconnecting.");
 			free(buffer);
 			packet_destroy(packet);
-			player_destroy(player);
+			player_disconnect(player);
 			return;
 		}
 		free(buffer);
