@@ -93,12 +93,12 @@ void player_connect(Player *player, Packet *packet)
 void player_destroy(Player *player)
 {
 	printf("Unregistering player: '%s'\n", player->username);
-	for(int i = 0; i < player->inventory->index; i++)
-		free(player->inventory->items[i]);
-	free(player->inventory);
+//	for(int i = 0; i < player->inventory->index; i++)
+//		free(player->inventory->items[i]);
+//	free(player->inventory);
 	region_remove_player(player->region, player->index);
-	player->region = NULL;
-	free(player->username);
+//	player->region = NULL;
+//	free(player->username);
 	players[player->index] = NULL;
 	client_destroy(player->loop, player->watcher);
 	close(player->socket);
@@ -122,7 +122,7 @@ void player_packet_send(Player *player, Packet *packet)
 		if(write(player->socket, packet->buffer, packet->offset + 1) < 0) {
 			warning("Player sent less bytes than encoded for; disconnecting.");
 			packet_destroy(packet);
-			player_disconnect(player);
+			player_destroy(player);
 			return;
 		}
 	} else {
@@ -139,7 +139,7 @@ void player_packet_send(Player *player, Packet *packet)
 			warning("Player sent less bytes than encoded for; disconnecting.");
 			free(buffer);
 			packet_destroy(packet);
-			player_disconnect(player);
+			player_destroy(player);
 			return;
 		}
 		free(buffer);
