@@ -122,7 +122,7 @@ int main(void)
 	memset((char*) &server_addr, 0, sizeof(server_addr));
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_addr.s_addr = INADDR_ANY;
-	server_addr.sin_port = htons(43594);
+	server_addr.sin_port = htons(43593);
 	if(bind(server_socket, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0)
 		error("Bind error; non-recoverable.");
 	if(listen(server_socket, 2) < 0)

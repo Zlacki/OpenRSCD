@@ -32,7 +32,6 @@ void update_player_positions(Player *player)
 	packet_add_bits(packet, player->x, 11);
 	packet_add_bits(packet, player->y, 13);
 	packet_add_bits(packet, player->direction, 4);
-	packet_add_bits(packet, 0, 8);
 
 	/* TODO: Minimize packet size when player doesn't need updating. */
 

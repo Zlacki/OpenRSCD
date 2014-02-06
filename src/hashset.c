@@ -1,7 +1,7 @@
 /*
  * hashset.c
  *
- * Copyright (C) 2011,2012,2013, Zach Knight <zach@libslack.so>
+ * Copyright (C) 2011,2012,2013,2014 Zach Knight <zach@libslack.so>
  *
  * Permission to use, copy, modify, and/or distribute this software
  * for any purpose with or without fee is hereby granted, provided
