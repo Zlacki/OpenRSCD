@@ -48,7 +48,6 @@ long username_to_hash(char *username)
 	}
 	s1[i] = '\0';
 
-	str_trim(s1);
 	if(strlen(s1) > 12)
 		s1[12] = '\0';
 
@@ -62,7 +61,6 @@ long username_to_hash(char *username)
 			l += (27 + c) - 48;
 	}
 
-	free(s1);
 	return l;
 }
 

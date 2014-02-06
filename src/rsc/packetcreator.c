@@ -32,6 +32,7 @@ void update_player_positions(Player *player)
 	packet_add_bits(packet, player->x, 11);
 	packet_add_bits(packet, player->y, 13);
 	packet_add_bits(packet, player->direction, 4);
+	packet_add_bits(packet, 0, 8);
 
 	/* TODO: Minimize packet size when player doesn't need updating. */
 
@@ -62,6 +63,7 @@ void update_player_appearances(Player *player)
 			packet_add_short(packet, player_to_update->index);
 			packet_add_byte(packet, 5); /* Appearance update or chat */
 			packet_add_long(packet, username_to_hash(player_to_update->username));
+			packet_add_byte(packet, 12);
 			for(int i = 0; i < 12; i++)
 				packet_add_byte(packet, player_to_update->worn_items[i]);
 			packet_add_byte(packet, 0); /* hair color */
@@ -108,11 +110,11 @@ void update_objects(Player *player)
 	for(Node *node = objects->first; node; node = node->next) {
 		Object *object = (Object*)node->val;
 		if(player_within_range(player, object->x, object->y)) {
-			packet_add_integer(packet, object->id);
+			packet_add_short(packet, object->id);
 			packet_add_byte(packet, object->x - player->x);
 			packet_add_byte(packet, object->y - player->y);
 		} else {
-			packet_add_integer(packet, 60000);
+			packet_add_short(packet, 60000);
 			packet_add_byte(packet, object->x - player->x);
 			packet_add_byte(packet, object->y - player->y);
 		}

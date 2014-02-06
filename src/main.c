@@ -52,16 +52,18 @@ void process_read(struct ev_loop *loop, struct ev_io *watcher, int revents)
 
 	char buffer[2];
 	int r = recv(watcher->fd, buffer, 2, 0);
-	if(r <= 0) {
+	if(r < 0) {
 		warning("Player socket died abnormally.");
 		client_destroy(loop, watcher);
 		return;
+	} else if(r == 0) {
+		client_destroy(loop, watcher);
+		return;
+	} else {
+		for(int i = 0; i < MAX_ENTITIES; i++)
+			if(clients[i] == watcher->fd)
+				on_read(i, ((short) ((buffer[0] & 0xFF) << 8) | (short) (buffer[1] & 0xFF)));
 	}
-
-	for(int i = 0; i < MAX_ENTITIES; i++)
-		if(clients[i] == watcher->fd)
-			on_read(i, ((short) ((buffer[0] & 0xFF) << 8) | (short) (buffer[1] & 0xFF)));
-
 	return;
 }
 

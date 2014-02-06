@@ -22,6 +22,8 @@
 #ifndef RSC_PACKET_H
 #define RSC_PACKET_H
 
+#include <stdint.h>
+
 typedef struct {
 	unsigned char *buffer;
 	unsigned char id;
@@ -35,6 +37,7 @@ void packet_destroy(Packet*);
 unsigned char packet_read_byte(Packet*);
 unsigned short packet_read_short(Packet*);
 unsigned int packet_read_int(Packet*);
+uint64_t packet_read_long(Packet *p);
 char *packet_read_string(Packet*);
 void packet_add_byte(Packet*, unsigned char);
 void packet_add_short(Packet*, unsigned short);

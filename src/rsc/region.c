@@ -84,7 +84,8 @@ Region **region_get_surrounding_regions(int x, int y)
 	int region_x = x / REGION_SIZE;
 	int region_y = y / REGION_SIZE;
 
-	Region **surrounding_regions = safe_alloc(sizeof(Region*) * 9);
+	Region **surrounding_regions = safe_alloc(sizeof(Region*) * 4);
+	/*
 	surrounding_regions[0] = get_region_with_coords(region_x, region_y);
 	surrounding_regions[1] = get_region_with_coords(region_x - 1, region_y - 1);
 	surrounding_regions[2] = get_region_with_coords(region_x + 1, region_y + 1);
@@ -94,6 +95,31 @@ Region **region_get_surrounding_regions(int x, int y)
 	surrounding_regions[6] = get_region_with_coords(region_x, region_y + 1);
 	surrounding_regions[7] = get_region_with_coords(region_x - 1, region_y + 1);
 	surrounding_regions[8] = get_region_with_coords(region_x + 1, region_y - 1);
+	*/
+
+	int relX = x % REGION_SIZE;
+	int relY = y % REGION_SIZE;
+	surrounding_regions[0] = get_region_with_coords(region_x, region_y);
+	if(relX <= REGION_LOWER_BOUND)
+			if(relY <= REGION_LOWER_BOUND) {
+					surrounding_regions[1] = get_region_with_coords(region_x - 1, region_y);;
+					surrounding_regions[2] = get_region_with_coords(region_x - 1, region_y - 1);
+					surrounding_regions[3] = get_region_with_coords(region_x, region_y - 1);
+			} else {
+					surrounding_regions[1] = get_region_with_coords(region_x - 1, region_y);;
+					surrounding_regions[2] = get_region_with_coords(region_x - 1, region_y + 1);
+					surrounding_regions[3] = get_region_with_coords(region_x, region_y + 1);
+			}
+	else
+			if(relY <= REGION_LOWER_BOUND) {
+					surrounding_regions[1] = get_region_with_coords(region_x + 1, region_y);
+					surrounding_regions[2] = get_region_with_coords(region_x + 1, region_y - 1);
+					surrounding_regions[3] = get_region_with_coords(region_x, region_y - 1);
+			} else {
+					surrounding_regions[1] = get_region_with_coords(region_x + 1, region_y);;
+					surrounding_regions[2] = get_region_with_coords(region_x + 1, region_y + 1);
+					surrounding_regions[3] = get_region_with_coords(region_x, region_y + 1);
+			}
 
 	return surrounding_regions;
 }

@@ -47,7 +47,7 @@ Packet *packet_create(unsigned char id)
 
 void packet_destroy(Packet *packet)
 {
-	free(packet->buffer);
+	//free(packet->buffer);
 	free(packet);
 	return;
 }
@@ -65,6 +65,18 @@ unsigned short packet_read_short(Packet *p)
 unsigned int packet_read_int(Packet *p)
 {
 	return ((packet_read_byte(p) & 0xFF) << 24) | ((packet_read_byte(p) & 0xFF) << 16) | ((packet_read_byte(p) & 0xFF) << 8) | (packet_read_byte(p) & 0xFF);
+}
+
+uint64_t packet_read_long(Packet *p)
+{
+	return ((long) (packet_read_byte(p) & 0xFF) << 56)
+			| ((long) (packet_read_byte(p) & 0xFF) << 48)
+			| ((long) (packet_read_byte(p) & 0xFF) << 40)
+			| ((long) (packet_read_byte(p) & 0xFF) << 32)
+			| ((long) (packet_read_byte(p) & 0xFF) << 24)
+			| ((long) (packet_read_byte(p) & 0xFF) << 16)
+			| ((long) (packet_read_byte(p) & 0xFF) << 8)
+			| (long) (packet_read_byte(p) & 0xFF);
 }
 
 char *packet_read_string(Packet *p)

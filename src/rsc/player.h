@@ -22,6 +22,7 @@
 #ifndef RSC_PLAYER_H
 #define RSC_PLAYER_H
 
+#include <stdint.h>
 #include <ev.h>
 #include "packet.h"
 #include "inventory.h"
@@ -31,6 +32,7 @@
 typedef struct {
 	unsigned int socket;
 	unsigned int index;
+	uint64_t username_hash;
 	char *username;
 	unsigned short x;
 	unsigned short y;

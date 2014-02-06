@@ -44,19 +44,16 @@ Player *player_create(struct ev_loop *loop, struct ev_io *watcher, unsigned int 
 
 void player_connect(Player *player, Packet *packet)
 {
-	packet_read_byte(packet); /* garbage */
 	unsigned int version = packet_read_short(packet);
 	if(version != 202) {
 		send_login_response(player, 5);
 		return;
 	}
 
-	char *username = packet_read_string(packet);
+	char *username = hash_to_username(packet_read_long(packet));
 	char *password = packet_read_string(packet);
-	str_trim(username);
 	str_trim(password);
-	player->username = hash_to_username(username_to_hash(username));
-	free(username);
+	player->username = username;
 	free(password);
 	player->region = NULL;
 	player->direction = 1;
@@ -70,8 +67,8 @@ void player_connect(Player *player, Packet *packet)
 	inventory_add_item(player->inventory, item_create(10, 20));
 	for(int i = 0; i < 5; i++)
 		player->bonuses[i] = 1;
-	player->worn_items[0] = 4;
-	player->worn_items[1] = 5;
+	player->worn_items[0] = 1;
+	player->worn_items[1] = 2;
 	player->worn_items[2] = 3;
 	for(int i = 3; i < 12; i++)
 		player->worn_items[i] = 0;
@@ -81,7 +78,7 @@ void player_connect(Player *player, Packet *packet)
 		else
 			player->skills[i] = 0L;
 
-	printf("Registering player: ‘%s’\n", player->username);
+	printf("Registering player: '%s'\n", player->username);
 	send_login_response(player, 0);
 	send_constants(player);
 	send_client_options(player);
@@ -95,7 +92,7 @@ void player_connect(Player *player, Packet *packet)
 
 void player_destroy(Player *player)
 {
-	printf("Unregistering player: ‘%s’\n", player->username);
+	printf("Unregistering player: '%s'\n", player->username);
 	for(int i = 0; i < player->inventory->index; i++)
 		free(player->inventory->items[i]);
 	free(player->inventory);
@@ -124,7 +121,6 @@ void player_packet_send(Player *player, Packet *packet)
 	if(packet->id == 255) {
 		if(write(player->socket, packet->buffer, packet->offset + 1) < 0) {
 			warning("Player sent less bytes than encoded for; disconnecting.");
-			printf("Error: %s\n", strerror(errno));
 			packet_destroy(packet);
 			player_destroy(player);
 			return;
@@ -141,7 +137,6 @@ void player_packet_send(Player *player, Packet *packet)
 
 		if(write(player->socket, buffer, packet->offset + 3) < 0) {
 			warning("Player sent less bytes than encoded for; disconnecting.");
-			printf("Error: %s\n", strerror(errno));
 			free(buffer);
 			packet_destroy(packet);
 			player_destroy(player);
@@ -222,7 +217,7 @@ List *player_get_regional_items(Player *player)
 	Region **surrounding_regions = region_get_surrounding_regions(player->x, player->y);
 
 	List *items_in_regional_area = list_create();
-	for(int i = 0; i < 9; i++) {
+	for(int i = 0; i < 4; i++) {
 		Region *region = surrounding_regions[i];
 		for(Node *node = region->items->first; node; node = node->next) {
 			GroundItem *item_in_regional_area = (GroundItem*) node->val;
@@ -241,7 +236,7 @@ List *player_get_regional_objects(Player *player)
 	Region **surrounding_regions = region_get_surrounding_regions(player->x, player->y);
 
 	List *objects_in_regional_area = list_create();
-	for(int i = 0; i < 9; i++) {
+	for(int i = 0; i < 4; i++) {
 		Region *region = surrounding_regions[i];
 		for(Node *node = region->objects->first; node; node = node->next) {
 			Object *object_in_regional_area = (Object*) node->val;
@@ -260,7 +255,7 @@ List *player_get_regional_players(Player *player)
 	Region **surrounding_regions = region_get_surrounding_regions(player->x, player->y);
 
 	List *players_in_regional_area = list_create();
-	for(int i = 0; i < 9; i++) {
+	for(int i = 0; i < 4; i++) {
 		Region *region = surrounding_regions[i];
 		for(Node *node = region->players->first; node; node = node->next) {
 			Player *player_in_regional_area = (Player*)node->val;

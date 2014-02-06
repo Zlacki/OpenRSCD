@@ -132,6 +132,8 @@ void handle_packet(Player *player, Packet *packet)
 	case 132:
 		handle_walking(player, packet);
 		break;
+	case 5:
+		break;
 	default:
 		printf("Unhandled packet: %d\n", packet->id);
 		break;

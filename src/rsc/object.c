@@ -41,7 +41,7 @@ List *object_get_regional_players(Object *object)
 	Region **surrounding_regions = region_get_surrounding_regions(object->x, object->y);
 
 	List *players_in_regional_area = list_create();
-	for(int i = 0; i < 9; i++) {
+	for(int i = 0; i < 4; i++) {
 		Region *region = surrounding_regions[i];
 		for(Node *node = region->players->first; node; node = node->next) {
 			Player *player_in_regional_area = (Player*)node->val;
