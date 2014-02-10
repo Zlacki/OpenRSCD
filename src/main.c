@@ -1,7 +1,7 @@
 /*
  * main.c
  *
- * Copyright (C) 2011,2012,2013, Zach Knight <zach@libslack.so>
+ * Copyright (C) 2013,2014, Zach Knight <zach@libslack.so>
  *
  * Permission to use, copy, modify, and/or distribute this software
  * for any purpose with or without fee is hereby granted, provided
@@ -35,18 +35,24 @@
 
 void client_destroy(struct ev_loop *loop, struct ev_io *watcher)
 {
-	clients[watcher->fd] = -1;
-	ev_io_stop(loop, watcher);
-	free(watcher);
+	for(int i = 0; i < MAX_ENTITIES; i++)
+		if(clients[i] == watcher->fd) {
+			clients[watcher->fd] = -1;
+			ev_io_stop(loop, watcher);
+			close(watcher->fd);
+			free(watcher);
+			printf("Client %d destroyed.\n", i);
+			break;
+		}
+
+	return;
 }
 
 void process_read(struct ev_loop *loop, struct ev_io *watcher, int revents)
 {
 	if(EV_ERROR & revents) {
 		warning("Recieved abnormal event; dropping.");
-		clients[watcher->fd] = -1;
-		ev_io_stop(loop, watcher);
-		free(watcher);
+		client_destroy(loop, watcher);
 		return;
 	}
 

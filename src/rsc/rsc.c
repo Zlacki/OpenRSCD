@@ -1,7 +1,7 @@
 /*
  * rsc.c
  *
- * Copyright (C) 2011,2012,2013, Zach Knight <zach@libslack.so>
+ * Copyright (C) 2013,2014, Zach Knight <zach@libslack.so>
  *
  * Permission to use, copy, modify, and/or distribute this software
  * for any purpose with or without fee is hereby granted, provided
@@ -45,7 +45,7 @@ void on_read(int index, int packet_length)
 
 	if(packet_length < 0 || packet_length > 5000) {
 		warning("Packet length outside array bounds; dropping packet and disconnecting user.");
-		player_disconnect(player);
+		player_destroy(player);
 		return;
 	}
 
@@ -55,7 +55,7 @@ void on_read(int index, int packet_length)
 		warning("Couldn't read full packet length; dropping packet and disconnecting user.");
 		printf("%d:%d\n", res, packet_length);
 		free(buffer);
-		player_disconnect(player);
+		player_destroy(player);
 		return;
 	}
 

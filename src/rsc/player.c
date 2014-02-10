@@ -1,7 +1,7 @@
 /*
  * player.c
  *
- * Copyright (C) 2011,2012,2013, Zach Knight <zach@libslack.so>
+ * Copyright (C) 2013,2014, Zach Knight <zach@libslack.so>
  *
  * Permission to use, copy, modify, and/or distribute this software
  * for any purpose with or without fee is hereby granted, provided
@@ -82,7 +82,7 @@ void player_connect(Player *player, Packet *packet)
 	send_login_response(player, 0);
 	send_constants(player);
 	send_client_options(player);
-	send_server_message(player, "Welcome to OpenRSCD!");
+	send_server_message(player, "Welcome to OpenRSCD");
 	send_stats(player);
 	send_inventory(player);
 	send_equipment_bonuses(player);
@@ -92,17 +92,27 @@ void player_connect(Player *player, Packet *packet)
 
 void player_destroy(Player *player)
 {
-	printf("Unregistering player: '%s'\n", player->username);
-//	for(int i = 0; i < player->inventory->index; i++)
-//		free(player->inventory->items[i]);
-//	free(player->inventory);
-	region_remove_player(player->region, player->index);
-//	player->region = NULL;
-//	free(player->username);
-	players[player->index] = NULL;
-	client_destroy(player->loop, player->watcher);
-	close(player->socket);
-	free(player);
+	if(player) {
+		if(player->username) {
+			printf("Unregistering player: '%s'\n", player->username);
+			free(player->username);
+		}
+		if(player->inventory) {
+			for(int i = 0; i < player->inventory->index; i++)
+				free(player->inventory->items[i]);
+			free(player->inventory);
+		}
+		if(player->region) {
+			region_remove_player(player->region, player->index);
+			player->region = NULL;
+		}
+		players[player->index] = NULL;
+		if(player->loop && player->watcher)
+			client_destroy(player->loop, player->watcher);
+		if(player->socket)
+			close(player->socket);
+		free(player);
+	}
 
 	return;
 }
