@@ -1,0 +1,75 @@
+{
+	"Prayers":
+	[
+		{
+			"name":"Thick skin",
+			"requiredLevel":1,
+			"drainrate":15
+		},
+		{
+			"name":"Burst of strength",
+			"requiredLevel":4,
+			"drainrate":15
+		},
+		{
+			"name":"Clarity of thought",
+			"requiredLevel":7,
+			"drainrate":15
+		},
+		{
+			"name":"Rock skin",
+			"requiredLevel":10,
+			"drainrate":30
+		},
+		{
+			"name":"Superhuman strength",
+			"requiredLevel":13,
+			"drainrate":30
+		},
+		{
+			"name":"Improved reflexes",
+			"requiredLevel":16,
+			"drainrate":30
+		},
+		{
+			"name":"Rapid restore",
+			"requiredLevel":19,
+			"drainrate":5
+		},
+		{
+			"name":"Rapid heal",
+			"requiredLevel":22,
+			"drainrate":10
+		},
+		{
+			"name":"Protect items",
+			"requiredLevel":25,
+			"drainrate":10
+		},
+		{
+			"name":"Steel skin",
+			"requiredLevel":28,
+			"drainrate":60
+		},
+		{
+			"name":"Ultimate strength",
+			"requiredLevel":31,
+			"drainrate":60
+		},
+		{
+			"name":"Incredible reflexes",
+			"requiredLevel":34,
+			"drainrate":60
+		},
+		{
+			"name":"Paralyze monster",
+			"requiredLevel":37,
+			"drainrate":60
+		},
+		{
+			"name":"Protect from missiles",
+			"requiredLevel":40,
+			"drainrate":60
+		},
+	]
+}

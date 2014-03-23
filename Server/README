@@ -1,0 +1,3 @@
+OpenRSCD is a game server daemon which is designed to emulate the RSClassic game protocols and game play as of version 204.
+
+Dependencies: Boost / Boost ASIO / STL
