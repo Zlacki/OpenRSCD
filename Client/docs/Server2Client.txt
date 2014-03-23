@@ -1,0 +1,37 @@
+
+// shows a message in the client chat log
+// message type is based on prefix, eg @pri@ is a private message
+SV_MESSAGE(131) {
+	string message
+}
+
+// requests the client initiate a connection close
+SV_INITCLOSECONNECTION(4) {
+}
+
+// makes the client show a message that it can't logout at the moment
+SV_ERRORLOGOUT(183) {
+}
+
+// list of friends
+SV_FRIENDSLIST(71) {
+    byte count
+    list to count {
+        long hash
+        byte online
+    }
+}
+
+// updates a friends online status
+// also used to add a new friend while online
+SV_FRIENDONLINE(149) {
+    long hash
+    byte online
+}
+
+SV_IGNORELIST(109) {
+    byte count
+    list to count {
+        long hash
+    }
+}
